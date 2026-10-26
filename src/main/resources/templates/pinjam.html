@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Pinjam Buku')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Form Transaksi Peminjaman</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<form th:action="@{/pinjam}" method="post">
+    <p><label>NIM anggota<br>
+        <input name="nim" th:value="${nimInput}" placeholder="NIM" required></label></p>
+    <p><label>Barcode salinan (boleh lebih dari satu, pisahkan dengan koma atau baris baru)<br>
+        <textarea name="barcode" rows="4" cols="40" th:text="${barcodeInput}" required></textarea></label></p>
+    <button type="submit">Proses Pinjam</button>
+</form>
+
+<h2>Salinan yang Tersedia</h2>
+<table>
+    <tr><th>Barcode</th><th>Judul</th><th>Penulis</th></tr>
+    <tr th:each="s : ${salinanTersedia}">
+        <td th:text="${s.barcode}">BC-001</td>
+        <td th:text="${s.buku.judul}">Judul</td>
+        <td th:text="${s.buku.penulis}">Penulis</td>
+    </tr>
+    <tr th:if="${salinanTersedia.isEmpty()}"><td colspan="3">Tidak ada salinan yang tersedia.</td></tr>
+</table>
+</body>
+</html>

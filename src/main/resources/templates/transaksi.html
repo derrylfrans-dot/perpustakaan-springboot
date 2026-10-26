@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Transaksi')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Transaksi Peminjaman</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<table>
+    <tr><th>ID Transaksi</th><th>Anggota</th><th>Tanggal Pinjam</th><th>Jatuh Tempo</th>
+        <th>Jumlah Buku</th><th>Status</th><th>Aksi</th></tr>
+    <tr th:each="t : ${daftarTransaksi}">
+        <td th:text="${t.idTransaksi}">TRX-1</td>
+        <td th:text="${t.anggota.infoAnggota}">Anggota</td>
+        <td th:text="${#temporals.format(t.tanggalPinjam, 'dd-MM-yyyy HH:mm')}">tgl</td>
+        <td>
+            <span th:text="${#temporals.format(t.tanggalJatuhTempo, 'dd-MM-yyyy')}">tgl</span>
+            <span class="terlambat" th:if="${t.terlambat}">(terlambat)</span>
+        </td>
+        <td th:text="${t.hitungJumlahItem()}">1</td>
+        <td><span class="status" th:classappend="${t.status}" th:text="${t.status}">AKTIF</span></td>
+        <td><a th:href="@{/transaksi/{id}(id=${t.idTransaksi})}">Lihat</a></td>
+    </tr>
+    <tr th:if="${daftarTransaksi.isEmpty()}"><td colspan="7">Belum ada transaksi.</td></tr>
+</table>
+</body>
+</html>

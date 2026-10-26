@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Anggota')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Anggota</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<table>
+    <tr><th>ID</th><th>NIM</th><th>Nama</th><th>Email</th><th>Status</th>
+        <th>Pinjaman Aktif / Batas</th><th>Aksi</th></tr>
+    <tr th:each="a : ${daftarAnggota}">
+        <td th:text="${a.idAnggota}">A001</td>
+        <td th:text="${a.nim}">NIM</td>
+        <td th:text="${a.nama}">Nama</td>
+        <td th:text="${a.email}">email</td>
+        <td><span class="status" th:classappend="${a.statusAnggota}" th:text="${a.statusAnggota}">AKTIF</span></td>
+        <td th:text="${a.jumlahPinjamanAktif} + ' / ' + ${a.batasPinjaman}">0 / 3</td>
+        <td>
+            <form th:action="@{/anggota/{id}/status(id=${a.idAnggota})}" method="post" class="inline">
+                <button type="submit" th:text="${a.validasiStatus()} ? 'Nonaktifkan' : 'Aktifkan'">Ubah</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Daftarkan Anggota</h2>
+<form th:action="@{/anggota}" method="post" class="baris">
+    <input name="idAnggota" placeholder="ID anggota" required>
+    <input name="nim" placeholder="NIM" required>
+    <input name="nama" placeholder="Nama" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <label>Batas pinjaman <input name="batasPinjaman" type="number" min="1" value="3" required></label>
+    <button type="submit">Simpan</button>
+</form>
+</body>
+</html>

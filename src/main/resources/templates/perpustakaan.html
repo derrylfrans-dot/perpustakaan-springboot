@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Perpustakaan & Rak')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Perpustakaan &amp; Rak Buku</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<h2>Perpustakaan</h2>
+<div class="kartu" th:each="p : ${daftarPerpustakaan}">
+    <strong th:text="${p.idPerpustakaan} + ' - ' + ${p.nama}">P01 - Nama</strong>
+    <span th:text="'(' + ${p.lokasi} + ')'">(lokasi)</span>
+    <form th:action="@{/perpustakaan/{id}/hapus(id=${p.idPerpustakaan})}" method="post" class="inline"
+          onsubmit="return confirm('Hapus perpustakaan ini? Rak-raknya tetap ada sebagai inventaris kampus.')">
+        <button type="submit">Tutup / Hapus</button>
+    </form>
+    <ul>
+        <li th:each="r : ${p.daftarRak}" th:text="${r.idRak} + ' - ' + ${r.infoRak}">Rak</li>
+        <li th:if="${p.daftarRak.isEmpty()}">Belum menaungi rak.</li>
+    </ul>
+</div>
+<p th:if="${daftarPerpustakaan.isEmpty()}">Belum ada perpustakaan.</p>
+
+<h3>Rak tanpa perpustakaan (inventaris independen kampus)</h3>
+<ul>
+    <li th:each="r : ${rakTanpaPerpustakaan}" th:text="${r.idRak} + ' - ' + ${r.infoRak}">Rak</li>
+    <li th:if="${rakTanpaPerpustakaan.isEmpty()}">Tidak ada.</li>
+</ul>
+
+<h2>Semua Rak Buku</h2>
+<table>
+    <tr><th>ID</th><th>Kode Rak</th><th>Lokasi</th><th>Dinaungi oleh</th><th>Pindahkan ke</th></tr>
+    <tr th:each="r : ${daftarRak}">
+        <td th:text="${r.idRak}">R01</td>
+        <td th:text="${r.kodeRak}">A-1</td>
+        <td th:text="${r.lokasi}">Lantai 1</td>
+        <td th:text="${r.perpustakaan != null} ? ${r.perpustakaan.nama} : '-'">-</td>
+        <td>
+            <form th:action="@{/rak/{id}/pindah(id=${r.idRak})}" method="post" class="baris">
+                <select name="idPerpustakaan">
+                    <option value="">(tanpa perpustakaan)</option>
+                    <option th:each="p : ${daftarPerpustakaan}" th:value="${p.idPerpustakaan}" th:text="${p.nama}"
+                            th:selected="${r.perpustakaan != null and r.perpustakaan.idPerpustakaan == p.idPerpustakaan}"></option>
+                </select>
+                <button type="submit">Pindah</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Tambah Perpustakaan</h2>
+<form th:action="@{/perpustakaan}" method="post" class="baris">
+    <input name="idPerpustakaan" placeholder="ID" required>
+    <input name="nama" placeholder="Nama" required>
+    <input name="lokasi" placeholder="Lokasi" required>
+    <button type="submit">Simpan</button>
+</form>
+
+<h2>Tambah Rak</h2>
+<form th:action="@{/rak}" method="post" class="baris">
+    <input name="idRak" placeholder="ID rak" required>
+    <input name="kodeRak" placeholder="Kode rak" required>
+    <input name="lokasi" placeholder="Lokasi" required>
+    <select name="idPerpustakaan">
+        <option value="">(tanpa perpustakaan)</option>
+        <option th:each="p : ${daftarPerpustakaan}" th:value="${p.idPerpustakaan}" th:text="${p.nama}"></option>
+    </select>
+    <button type="submit">Simpan</button>
+</form>
+</body>
+</html>

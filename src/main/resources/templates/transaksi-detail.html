@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Bukti Peminjaman')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Bukti Peminjaman</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<table>
+    <tr><th>ID Transaksi</th><td th:text="${transaksi.idTransaksi}">TRX-1</td></tr>
+    <tr><th>Anggota</th><td th:text="${transaksi.anggota.infoAnggota}">Anggota</td></tr>
+    <tr><th>Tanggal Pinjam</th><td th:text="${#temporals.format(transaksi.tanggalPinjam, 'dd-MM-yyyy HH:mm')}">tgl</td></tr>
+    <tr><th>Jatuh Tempo</th>
+        <td><span th:text="${#temporals.format(transaksi.tanggalJatuhTempo, 'dd-MM-yyyy')}">tgl</span>
+            <span class="terlambat" th:if="${transaksi.terlambat}">(terlambat)</span></td></tr>
+    <tr><th>Status</th>
+        <td><span class="status" th:classappend="${transaksi.status}" th:text="${transaksi.status}">AKTIF</span></td></tr>
+</table>
+
+<h2>Detail Peminjaman (<span th:text="${transaksi.hitungJumlahItem()}">0</span> buku)</h2>
+<table>
+    <tr><th>ID Detail</th><th>Barcode</th><th>Judul</th><th>Status Salinan</th></tr>
+    <tr th:each="d : ${transaksi.daftarDetail}">
+        <td th:text="${d.idDetail}">D1</td>
+        <td th:text="${d.salinanBuku.barcode}">BC</td>
+        <td th:text="${d.salinanBuku.buku.judul}">Judul</td>
+        <td><span class="status" th:classappend="${d.salinanBuku.status}" th:text="${d.salinanBuku.status}">DIPINJAM</span></td>
+    </tr>
+</table>
+
+<div th:if="${transaksi.status.name() == 'AKTIF'}" class="baris">
+    <form th:action="@{/transaksi/{id}/kembali(id=${transaksi.idTransaksi})}" method="post" class="inline">
+        <button type="submit">Kembalikan Semua Buku</button>
+    </form>
+    <form th:action="@{/transaksi/{id}/batal(id=${transaksi.idTransaksi})}" method="post" class="inline"
+          onsubmit="return confirm('Batalkan transaksi ini?')">
+        <button type="submit">Batalkan Transaksi</button>
+    </form>
+</div>
+
+<p><a th:href="@{/transaksi}">&larr; Semua transaksi</a> &middot; <a th:href="@{/pinjam}">Peminjaman baru</a></p>
+</body>
+</html>

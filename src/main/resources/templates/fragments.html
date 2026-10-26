@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Potongan HTML yang dipakai ulang di semua halaman -->
+<head th:fragment="head(judul)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${judul} + ' - Perpustakaan | Derryl Smith Frans (255150407111101)'">Perpustakaan</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+<nav th:fragment="nav">
+    <strong>Perpustakaan Kampus</strong>
+    <a th:href="@{/pinjam}">Pinjam Buku</a>
+    <a th:href="@{/transaksi}">Transaksi</a>
+    <a th:href="@{/buku}">Katalog Buku</a>
+    <a th:href="@{/anggota}">Anggota</a>
+    <a th:href="@{/perpustakaan}">Perpustakaan &amp; Rak</a>
+    <!-- Penanda pengerjaan tugas individu -->
+    <span class="identitas">Derryl Smith Frans &middot; NIM 255150407111101</span>
+</nav>
+
+<div th:fragment="pesan">
+    <p class="pesan sukses" th:if="${pesan}" th:text="${pesan}"></p>
+    <p class="pesan error" th:if="${pesanError}" th:text="${pesanError}"></p>
+</div>
+</body>
+</html>

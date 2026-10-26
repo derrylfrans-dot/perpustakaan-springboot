@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Detail Buku')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1 th:text="${buku.judul}">Judul</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<p th:text="${buku.infoBuku}">Info buku</p>
+<p>ISBN: <span th:text="${buku.isbn}"></span> &middot;
+   Tersedia: <span th:text="${buku.stokTersedia} + ' dari ' + ${buku.daftarSalinan.size()} + ' salinan'"></span></p>
+
+<h2>Salinan Buku (Eksemplar)</h2>
+<table>
+    <tr><th>ID Salinan</th><th>Barcode</th><th>Status</th></tr>
+    <tr th:each="s : ${buku.daftarSalinan}">
+        <td th:text="${s.idSalinan}">S001</td>
+        <td th:text="${s.barcode}">BC-001</td>
+        <td><span class="status" th:classappend="${s.status}" th:text="${s.status}">TERSEDIA</span></td>
+    </tr>
+    <tr th:if="${buku.daftarSalinan.isEmpty()}"><td colspan="3">Belum ada salinan.</td></tr>
+</table>
+
+<h2>Tambah Salinan</h2>
+<form th:action="@{/buku/{id}/salinan(id=${buku.idBuku})}" method="post" class="baris">
+    <input name="idSalinan" placeholder="ID salinan" required>
+    <input name="barcode" placeholder="Barcode" required>
+    <button type="submit">Simpan</button>
+</form>
+
+<p><a th:href="@{/buku}">&larr; Kembali ke katalog</a></p>
+</body>
+</html>

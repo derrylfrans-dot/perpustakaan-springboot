@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Katalog Buku')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<h1>Katalog Buku</h1>
+<div th:replace="~{fragments :: pesan}"></div>
+
+<form th:action="@{/buku}" method="get" class="baris">
+    <input name="kata" th:value="${kata}" placeholder="Cari judul">
+    <button type="submit">Cari</button>
+</form>
+
+<table>
+    <tr><th>ID</th><th>ISBN</th><th>Judul</th><th>Penulis</th><th>Penerbit</th><th>Tahun</th>
+        <th>Tersedia / Salinan</th><th>Aksi</th></tr>
+    <tr th:each="b : ${daftarBuku}">
+        <td th:text="${b.idBuku}">B001</td>
+        <td th:text="${b.isbn}">ISBN</td>
+        <td th:text="${b.judul}">Judul buku</td>
+        <td th:text="${b.penulis}">Penulis</td>
+        <td th:text="${b.penerbit}">Penerbit</td>
+        <td th:text="${b.tahunTerbit}">2020</td>
+        <td th:text="${b.stokTersedia} + ' / ' + ${b.daftarSalinan.size()}">0 / 0</td>
+        <td>
+            <a th:href="@{/buku/{id}(id=${b.idBuku})}">Salinan</a>
+            <form th:action="@{/buku/{id}/hapus(id=${b.idBuku})}" method="post" class="inline"
+                  onsubmit="return confirm('Hapus buku ini beserta seluruh salinannya?')">
+                <button type="submit">Hapus</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Tambah Buku</h2>
+<form th:action="@{/buku}" method="post" class="baris">
+    <input name="idBuku" placeholder="ID" required>
+    <input name="isbn" placeholder="ISBN" required>
+    <input name="judul" placeholder="Judul" required>
+    <input name="penulis" placeholder="Penulis" required>
+    <input name="penerbit" placeholder="Penerbit" required>
+    <input name="tahunTerbit" type="number" min="0" placeholder="Tahun terbit" required>
+    <button type="submit">Simpan</button>
+</form>
+</body>
+</html>

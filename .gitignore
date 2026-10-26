@@ -1,0 +1,15 @@
+# Hasil build Maven
+target/
+
+# File IDE / tools
+.claude/
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# File sistem operasi
+.DS_Store
+Thumbs.db
