@@ -25,7 +25,7 @@ menjadi 7 entity sesuai Design Class Diagram: `Perpustakaan`, `RakBuku`, `Buku`,
 
 ## Teknologi
 
-Java 17, Spring Boot 3.3.5 (Spring Web, Thymeleaf, Spring Data JPA), database H2 in-memory, Maven, Docker, Railway.
+Java 17, Spring Boot 3.3.5 (Spring Web, Thymeleaf, Spring Data JPA), database H2 in-memory, Maven, Docker.
 
 ## Menjalankan di Komputer Lokal
 
@@ -43,14 +43,3 @@ Unit test entity:
 ```bash
 mvn test
 ```
-
-## Deploy ke Railway
-
-Repositori ini memiliki `Dockerfile`, sehingga Railway otomatis membangun image dari Dockerfile tersebut.
-Aplikasi membaca port dari variabel `PORT` yang disediakan Railway (`server.port=${PORT:8080}`).
-
-1. Buka https://railway.com/new → **Deploy from GitHub repo** → pilih repositori ini → **Deploy**.
-2. Setelah build selesai, buka tab **Settings** → **Networking** → **Generate Domain**.
-3. Buka domain `*.up.railway.app` yang dihasilkan.
-
-Catatan: data tersimpan di H2 in-memory, sehingga kembali ke data awal (`data.sql`) setiap aplikasi di-restart.
